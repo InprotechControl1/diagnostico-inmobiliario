@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Diagnóstico Inmobiliario Pro</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<style>
+:root{
+  --bg:#0a0a0a;
+  --surface:#111;
+  --surface2:#161616;
+  --border:rgba(255,255,255,0.08);
+  --border-strong:rgba(255,255,255,0.14);
+  --text:#f0ede8;
+  --muted:rgba(240,237,232,0.4);
+  --muted2:rgba(240,237,232,0.2);
+  --green:#4ade80;
+  --green-bg:rgba(74,222,128,0.08);
+  --green-border:rgba(74,222,128,0.2);
+  --amber:#fbbf24;
+  --amber-bg:rgba(251,191,36,0.08);
+  --amber-border:rgba(251,191,36,0.2);
+  --red:#f87171;
+  --red-bg:rgba(248,113,113,0.08);
+  --red-border:rgba(248,113,113,0.2);
+  --blue:#60a5fa;
+  --blue-bg:rgba(96,165,250,0.08);
+  --blue-border:rgba(96,165,250,0.15);
+  --serif:'DM Serif Display',serif;
+  --sans:'DM Sans',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:var(--sans);
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+}
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  opacity:0.4;pointer-events:none;z-index:0;
+}
+.wrap{
+  position:relative;z-index:1;
+  max-width:620px;margin:0 auto;
+  padding:0 1.5rem;
+}
+nav{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1.75rem 0 0;
+  margin-bottom:5rem;
+  animation:rise 0.7s ease both;
+}
+.nav-logo{
+  display:flex;align-items:center;gap:10px;
+  font-family:var(--serif);font-size:18px;
+  color:var(--text);
+}
+.nav-logo svg{width:24px;height:24px;}
+.nav-badge{
+  font-family:var(--sans);font-size:11px;font-weight:500;
+  color:var(--muted);letter-spacing:0.04em;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:20px;padding:4px 12px;
+}
+.hero{
+  text-align:center;
+  margin-bottom:4rem;
+}
+.hero-eyebrow{
+  font-size:12px;font-weight:500;
+  letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:1.5rem;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  animation:rise 0.7s ease 0.1s both;
+}
+.eyebrow-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--green);
+  box-shadow:0 0 8px var(--green);
+  animation:pulse-green 2.5s ease-in-out infinite;
+}
+@keyframes pulse-green{0%,100%{opacity:1;}50%{opacity:0.4;}}
+.hero h1{
+  font-family:var(--serif);
+  font-size:clamp(42px,8vw,72px);
+  font-weight:400;
+  line-height:1.05;
+  letter-spacing:-0.02em;
+  color:var(--text);
+  margin-bottom:1.5rem;
+  animation:rise 0.7s ease 0.2s both;
+}
+.hero h1 em{
+  font-style:italic;
+  color:var(--muted);
+}
+.hero-sub{
+  font-size:16px;font-weight:300;
+  color:var(--muted);line-height:1.7;
+  max-width:440px;margin:0 auto;
+  animation:rise 0.7s ease 0.3s both;
+}
+@keyframes rise{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+.usage-wrap{
+  margin-bottom:1rem;
+  animation:rise 0.7s ease 0.35s both;
+}
+.usage-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:14px 20px;
+  display:flex;align-items:center;gap:16px;
+}
+.usage-pips{display:flex;gap:5px;}
+.pip{
+  height:3px;width:32px;border-radius:2px;
+  background:rgba(255,255,255,0.1);
+  transition:all 0.4s ease;
+}
+.pip.used{background:var(--text);box-shadow:0 0 6px rgba(240,237,232,0.3);}
+.pip.depleted{background:var(--red);box-shadow:0 0 6px rgba(248,113,113,0.4);}
+.usage-label{
+  font-size:12px;font-weight:400;
+  color:var(--muted);flex:1;
+}
+.usage-label strong{color:var(--text);font-weight:500;}
+.upgrade-btn{
+  font-size:11px;font-weight:500;
+  letter-spacing:0.06em;
+  color:var(--text);
+  background:var(--surface2);
+  border:1px solid var(--border-strong);
+  border-radius:8px;
+  padding:5px 12px;
+  cursor:pointer;
+  transition:all 0.2s;
+  white-space:nowrap;
+}
+.upgrade-btn:hover{background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.25);}
+.scan-wrap{
+  margin-bottom:1.5rem;
+  animation:rise 0.7s ease 0.4s both;
+}
+.scan-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:1.5rem;
+  transition:border-color 0.3s;
+}
+.options-area {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin: 1rem 0;
+}
+.option-item {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.option-item.selected {
+  background: rgba(96,165,250,0.12);
+  border-color: var(--blue);
+  box-shadow: 0 0 0 1px var(--blue);
+}
+.option-item:hover {
+  border-color: var(--border-strong);
+  background: rgba(255,255,255,0.03);
+}
+.scan-btn{
+  background:var(--text);
+  border:none;border-radius:10px;
+  padding:10px 22px;
+  font-family:var(--sans);font-size:13px;font-weight:500;
+  color:var(--bg);
+  cursor:pointer;
+  transition:opacity 0.2s,transform 0.1s;
+  white-space:nowrap;
+  letter-spacing:0.02em;
+  flex-shrink:0;
+}
+.scan-btn:hover{opacity:0.88;}
+.scan-btn:active{transform:scale(0.97);}
+.scan-btn:disabled{opacity:0.25;cursor:not-allowed;}
+.result-zone{display:none;}
+.result-zone.active{display:block;}
+.verdict-card{
+  border-radius:18px;padding:2rem;
+  margin-bottom:1rem;
+  display:flex;align-items:flex-start;gap:1.5rem;
+  animation:rise 0.5s ease both;
+}
+.vc-safe{background:var(--green-bg);border:1px solid var(--green-border);}
+.vc-warn{background:var(--amber-bg);border:1px solid var(--amber-border);}
+.vc-danger{background:var(--red-bg);border:1px solid var(--red-border);}
+.verdict-body h2{
+  font-family:var(--serif);font-size:28px;font-weight:400;
+  letter-spacing:-0.01em;margin-bottom:6px;
+}
+.vc-safe .verdict-body h2{color:var(--green);}
+.vc-warn .verdict-body h2{color:var(--amber);}
+.vc-danger .verdict-body h2{color:var(--red);}
+.verdict-body p{
+  font-size:13px;font-weight:300;
+  color:var(--muted);line-height:1.6;
+}
+.badges{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1rem;}
+.bdg{
+  font-size:10px;font-weight:500;letter-spacing:0.08em;
+  padding:4px 10px;border-radius:6px;border:1px solid;
+}
+.bdg-blue{background:var(--blue-bg);border-color:var(--blue-border);color:var(--blue);}
+.bdg-green{background:var(--green-bg);border-color:var(--green-border);color:var(--green);}
+.bdg-red{background:var(--red-bg);border-color:var(--red-border);color:var(--red);}
+.bdg-amber{background:var(--amber-bg);border-color:var(--amber-border);color:var(--amber);}
+.toast{
+  display:none;
+  background:var(--surface2);border:1px solid var(--border-strong);
+  border-radius:10px;padding:10px 16px;
+  font-size:12px;font-weight:300;color:var(--muted);
+  margin-top:10px;text-align:center;
+}
+.toast.active{display:block;animation:rise 0.3s ease both;}
+footer{
+  margin-top:5rem;padding:2rem 0 3rem;
+  border-top:1px solid var(--border);
+  display:flex;flex-direction:column;gap:6px;
+  align-items:center;
+  font-size:11px;font-weight:300;color:var(--muted2);
+  text-align:center;line-height:1.8;
+}
+footer strong{color:var(--muted);font-weight:400;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav>
+    <div class="nav-logo">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2L3 6.5V13C3 18 12 22 12 22C12 22 21 18 21 13V6.5L12 2Z" fill="rgba(240,237,232,0.06)" stroke="rgba(240,237,232,0.3)" stroke-width="1.2"/>
+        <path d="M8.5 12L11 14.5L15.5 10" stroke="rgba(240,237,232,0.8)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      InmoDiagnóstico
+    </div>
+    <div class="nav-badge">powered by Gemini AI</div>
+  </nav>
+
+  <div class="hero">
+    <div class="hero-eyebrow">
+      <div class="eyebrow-dot"></div>
+      Diagnóstico inmobiliario
+    </div>
+    <h1>¿Qué necesita<br/><em>tu agencia?</em></h1>
+    <p class="hero-sub">Analiza tus procesos, detecta áreas de mejora y recibe recomendaciones con inteligencia artificial.</p>
+  </div>
+
+  <div class="usage-wrap">
+    <div class="usage-card" id="usageBar">
+      <div class="usage-pips" id="usageDots"></div>
+      <div class="usage-label" id="usageText"></div>
+      <button class="upgrade-btn" onclick="showPaywall()">Actualizar</button>
+    </div>
+  </div>
+
+  <div id="paywallZone"></div>
+
+  <!-- Cuestionario dinámico -->
+  <div class="scan-wrap" id="diagnosticWrap">
+    <div class="scan-card" id="questionCard">
+      <div class="scan-hint" id="stepCounter">Paso 1 de 7</div>
+      <div id="questionText" style="font-size: 1.25rem; font-weight: 500; margin-bottom: 1.5rem;"></div>
+      <div id="optionsArea" class="options-area"></div>
+      <div style="display: flex; justify-content: space-between; margin-top: 1.5rem;">
+        <button class="scan-btn" id="prevBtn" style="background: transparent; color: var(--text); border: 1px solid var(--border);" disabled>← Anterior</button>
+        <button class="scan-btn" id="nextBtn">Siguiente →</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="result-zone" id="resultZone"></div>
+  <div class="toast" id="toast"></div>
+
+  <footer>
+    <strong>InmoDiagnóstico</strong>
+    <span>© 2026 InmoDiagnóstico. Todos los derechos reservados.</span>
+    <span>Herramienta de diagnóstico para agencias inmobiliarias en Venezuela.</span>
+  </footer>
+</div>
+
+<script>
+// ---------- DATOS DEL DIAGNÓSTICO ----------
+const questions = [
+  { text: "¿Cómo obtienes la mayoría de tus clientes potenciales?", options: ["Solo boca a boca / referidos", "Redes sociales (Instagram, Facebook)", "Portales inmobiliarios (Tucasa, etc.)", "WhatsApp Business / catálogos", "No tengo un método definido"] },
+  { text: "¿Cómo organizas la información de las propiedades?", options: ["En mi mente / cuaderno físico", "Excel o Google Sheets", "Una app o CRM", "No llevo un registro formal"] },
+  { text: "¿Qué haces después de mostrar una propiedad?", options: ["Espero que me llamen", "Hago seguimiento manual por WhatsApp cada pocos días", "Uso recordatorios automáticos (agenda, CRM)", "No suelo hacer seguimiento"] },
+  { text: "¿Con qué frecuencia tienes acceso a internet confiable cuando trabajas en campo?", options: ["Siempre (4G estable)", "A veces (zonas con cobertura limitada)", "Casi nunca – dependo de WiFi en oficina"] },
+  { text: "¿Cómo gestionas los contratos y documentos con clientes?", options: ["Todo en papel, firmas físicas", "Uso PDF y WhatsApp, pero sin firma digital", "Uso alguna plataforma de firma electrónica", "No tengo un proceso estandarizado"] },
+  { text: "¿Cuál es tu mayor dolor hoy?", options: ["Falta de clientes / leads", "Pérdida de tiempo en tareas manuales", "Dificultad para organizar propiedades y seguimientos", "Cerrar ventas (proceso largo)"] },
+  { text: "¿Eres?", options: ["Agente independiente", "Parte de una agencia pequeña (1-5 agentes)", "Agencia mediana o grande", "Corredor / administrador de propiedades"] }
+];
+
+let currentStep = 0;
+let answers = new Array(questions.length).fill(null);
+let basicReportGenerated = false;
+
+// Elementos DOM
+const diagnosticWrap = document.getElementById('diagnosticWrap');
+const resultZone = document.getElementById('resultZone');
+const stepCounter = document.getElementById('stepCounter');
+const questionText = document.getElementById('questionText');
+const optionsArea = document.getElementById('optionsArea');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+
+// --- Sistema de límite diario (3 gratuitos) ---
+const FREE_LIMIT = 3;
+function getToday() { return new Date().toDateString(); }
+function getUsage() {
+  try {
+    const raw = localStorage.getItem('diagnostic_usage');
+    if (!raw) return { count: 0, date: getToday(), pro: false };
+    const s = JSON.parse(raw);
+    if (s.date !== getToday()) return { count: 0, date: getToday(), pro: s.pro || false };
+    return { count: s.count || 0, date: s.date, pro: s.pro || false };
+  } catch(e) { return { count: 0, date: getToday(), pro: false }; }
+}
+function canGenerateBasicReport() {
+  const u = getUsage();
+  return u.pro || u.count < FREE_LIMIT;
+}
+function incrementUsage() {
+  const u = getUsage();
+  if (!u.pro) {
+    u.count = (u.count || 0) + 1;
+    u.date = getToday();
+    localStorage.setItem('diagnostic_usage', JSON.stringify(u));
+  }
+  renderUsageBar();
+}
+function renderUsageBar() {
+  const u = getUsage();
+  const bar = document.getElementById('usageBar');
+  if (!bar) return;
+  if (u.pro) {
+    bar.innerHTML = '<div style="font-size:12px;font-weight:400;color:rgba(240,237,232,0.6);">Plan Pro activo — diagnósticos ilimitados</div>';
+    return;
+  }
+  const used = Math.min(u.count, FREE_LIMIT);
+  const rem = FREE_LIMIT - used;
+  const dots = document.getElementById('usageDots');
+  const txt = document.getElementById('usageText');
+  if (!dots || !txt) return;
+  dots.innerHTML = '';
+  for (let i = 0; i < FREE_LIMIT; i++) {
+    const d = document.createElement('div');
+    d.className = 'pip' + (i < used ? (rem === 0 ? ' depleted' : ' used') : '');
+    dots.appendChild(d);
+  }
+  txt.innerHTML = rem > 0
+    ? `<strong>${rem} de ${FREE_LIMIT}</strong> diagnósticos gratuitos hoy`
+    : '<strong style="color:var(--red)">Límite alcanzado</strong> — actualiza a Pro';
+}
+function showPaywall() {
+  const pz = document.getElementById('paywallZone');
+  pz.innerHTML = `
+    <div class="paywall" style="background:var(--surface); border:1px solid var(--border-strong); border-radius:18px; padding:2rem; text-align:center; margin-bottom:1.5rem;">
+      <div class="paywall-tag" style="display:inline-block; font-size:11px; letter-spacing:0.1em; border:1px solid var(--border); border-radius:20px; padding:4px 14px; margin-bottom:1rem;">InmoDiagnóstico Pro</div>
+      <h3 style="font-family:var(--serif); font-size:32px; font-weight:400;">Informe con IA</h3>
+      <p style="margin:1rem 0;">Obtén un diagnóstico personalizado, plan de acción y herramientas concretas.</p>
+      <div class="paywall-price" style="font-family:var(--serif); font-size:52px;">$7 <span style="font-size:14px;">/mes</span></div>
+      <button class="paywall-cta" style="background:var(--text); border:none; border-radius:12px; padding:12px; width:100%; margin-top:1rem;" onclick="alert('Próximamente disponible. Pago manual por ahora.')">Activar Pro</button>
+      <button class="paywall-dismiss" style="background:none; border:none; color:var(--muted2); margin-top:1rem; cursor:pointer;" onclick="document.getElementById('paywallZone').innerHTML='';">Cerrar</button>
+    </div>
+  `;
+}
+
+// --- Lógica de persistencia local ---
+function loadSavedAnswers() {
+  const saved = localStorage.getItem('diagnostic_answers');
+  const savedStep = localStorage.getItem('diagnostic_step');
+  if (saved) {
+    try {
+      const parsed = JSON.parse(saved);
+      if (parsed.length === questions.length) answers = parsed;
+    } catch(e) {}
+  }
+  if (savedStep && !isNaN(parseInt(savedStep))) {
+    currentStep = Math.min(parseInt(savedStep), questions.length - 1);
+  }
+  renderQuestion();
+}
+function saveProgress() {
+  localStorage.setItem('diagnostic_answers', JSON.stringify(answers));
+  localStorage.setItem('diagnostic_step', currentStep);
+}
+function renderQuestion() {
+  const q = questions[currentStep];
+  stepCounter.innerText = `Paso ${currentStep+1} de ${questions.length}`;
+  questionText.innerText = q.text;
+  optionsArea.innerHTML = '';
+  q.options.forEach((opt, idx) => {
+    const div = document.createElement('div');
+    div.className = 'option-item';
+    if (answers[currentStep] === idx) div.classList.add('selected');
+    div.innerText = opt;
+    div.addEventListener('click', () => {
+      document.querySelectorAll('.option-item').forEach(el => el.classList.remove('selected'));
+      div.classList.add('selected');
+      answers[currentStep] = idx;
+      saveProgress();
+    });
+    optionsArea.appendChild(div);
+  });
+  prevBtn.disabled = currentStep === 0;
+}
+function goToNext() {
+  if (answers[currentStep] === null) {
+    showToast('Por favor selecciona una opción antes de continuar.');
+    return;
+  }
+  if (currentStep === questions.length - 1) {
+    finishDiagnostic();
+  } else {
+    currentStep++;
+    renderQuestion();
+    saveProgress();
+  }
+}
+function goToPrev() {
+  if (currentStep > 0) {
+    currentStep--;
+    renderQuestion();
+    saveProgress();
+  }
+}
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.innerText = msg;
+  toast.classList.add('active');
+  setTimeout(() => toast.classList.remove('active'), 3000);
+}
+
+// --- Informe gratuito (lógica local) ---
+function finishDiagnostic() {
+  if (!canGenerateBasicReport()) {
+    showToast('Has alcanzado el límite de diagnósticos gratuitos. Actualiza a Pro para más análisis.');
+    showPaywall();
+    return;
+  }
+  incrementUsage(); // Consume un diagnóstico gratuito
+  diagnosticWrap.style.display = 'none';
+  
+  // Calcular puntuaciones simples
+  const scores = {
+    captacion: answers[0] <= 2 ? 'bajo' : (answers[0] === 3 ? 'medio' : 'alto'),
+    gestion: answers[1] <= 1 ? 'bajo' : (answers[1] === 2 ? 'medio' : 'alto'),
+    seguimiento: answers[2] <= 1 ? 'bajo' : (answers[2] === 2 ? 'medio' : 'alto'),
+    tecnologia: answers[3] === 0 ? 'alto' : (answers[3] === 1 ? 'medio' : 'bajo'),
+    documentacion: answers[4] <= 1 ? 'bajo' : (answers[4] === 2 ? 'medio' : 'alto'),
+  };
+  
+  const recomendaciones = [];
+  if (scores.captacion === 'bajo') recomendaciones.push('Implementa un registro de leads en WhatsApp Business o un CRM gratuito.');
+  if (scores.gestion === 'bajo') recomendaciones.push('Organiza tus propiedades en una hoja de cálculo compartida o prueba una app como HubSpot.');
+  if (scores.seguimiento === 'bajo') recomendaciones.push('Usa recordatorios en tu celular o un CRM con automatización de mensajes.');
+  if (scores.tecnologia === 'bajo') recomendaciones.push('Considera herramientas offline-first como Airtable o Google Sheets con sincronización.');
+  if (scores.documentacion === 'bajo') recomendaciones.push('Adopta firma electrónica gratuita (ej. SignNow, DocuSign) para agilizar cierres.');
+  
+  const html = `
+    <div class="verdict-card vc-warn" style="display:block;">
+      <div class="verdict-body">
+        <h2>Diagnóstico rápido</h2>
+        <div class="badges">
+          ${scores.captacion === 'bajo' ? '<span class="bdg bdg-red">📉 Captación baja</span>' : (scores.captacion === 'medio' ? '<span class="bdg bdg-amber">📊 Captación media</span>' : '<span class="bdg bdg-green">📈 Buena captación</span>')}
+          ${scores.gestion === 'bajo' ? '<span class="bdg bdg-red">📂 Gestión desorganizada</span>' : (scores.gestion === 'medio' ? '<span class="bdg bdg-amber">🗂️ Gestión básica</span>' : '<span class="bdg bdg-green">✅ Gestión avanzada</span>')}
+          ${scores.seguimiento === 'bajo' ? '<span class="bdg bdg-red">⏳ Seguimiento manual</span>' : (scores.seguimiento === 'medio' ? '<span class="bdg bdg-amber">📱 Seguimiento básico</span>' : '<span class="bdg bdg-green">🤖 Seguimiento automatizado</span>')}
+        </div>
+        <p><strong>Madurez digital:</strong> ${Object.values(scores).filter(s => s === 'alto').length} áreas fuertes, ${Object.values(scores).filter(s => s === 'bajo').length} áreas por mejorar.</p>
+        <p><strong>Recomendaciones inmediatas:</strong><br/>${recomendaciones.map(r => `• ${r}`).join('<br/>')}</p>
+        <button class="scan-btn" id="unlockProBtn" style="margin-top:1rem;">✨ Obtener informe personalizado con IA →</button>
+        <button class="scan-btn" id="shareWhatsappBtn" style="margin-top:0.5rem; background:transparent; border:1px solid var(--border);">📱 Compartir diagnóstico por WhatsApp</button>
+      </div>
+    </div>
+  `;
+  resultZone.innerHTML = html;
+  resultZone.classList.add('active');
+  
+  document.getElementById('unlockProBtn').addEventListener('click', requestProReport);
+  document.getElementById('shareWhatsappBtn').addEventListener('click', () => shareViaWhatsApp());
+  basicReportGenerated = true;
+}
+
+// --- Llamada a Cloudflare Function para informe Pro ---
+async function requestProReport() {
+  const btn = document.getElementById('unlockProBtn');
+  const originalText = btn.innerText;
+  btn.innerText = 'Generando informe con IA...';
+  btn.disabled = true;
+  
+  try {
+    const response = await fetch('/gemini-report', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ answers: answers.map((ans, idx) => ({ question: questions[idx].text, answer: questions[idx].options[ans] })) })
+    });
+    if (!response.ok) throw new Error('Error en la función');
+    const data = await response.json();
+    showProReport(data.report);
+  } catch (error) {
+    showToast('Error al generar informe. Intenta nuevamente.');
+    console.error(error);
+  } finally {
+    btn.innerText = originalText;
+    btn.disabled = false;
+  }
+}
+
+function showProReport(reportText) {
+  const htmlReport = reportText.replace(/\n/g, '<br/>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  resultZone.innerHTML = `
+    <div class="verdict-card vc-safe" style="display:block;">
+      <div class="verdict-body">
+        <h2>Informe Personalizado</h2>
+        <div style="margin: 1rem 0; padding: 1rem; background: var(--surface2); border-radius: 12px;">
+          ${htmlReport}
+        </div>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <button class="scan-btn" id="exportPDFBtn">📄 Exportar a PDF</button>
+          <button class="scan-btn" id="exportJSONBtn">📦 Exportar JSON</button>
+          <button class="scan-btn" id="shareProWhatsApp">📱 Compartir por WhatsApp</button>
+        </div>
+      </div>
+    </div>
+  `;
+  document.getElementById('exportPDFBtn').addEventListener('click', () => exportToPDF(reportText));
+  document.getElementById('exportJSONBtn').addEventListener('click', () => exportToJSON(reportText));
+  document.getElementById('shareProWhatsApp').addEventListener('click', () => shareProViaWhatsApp(reportText));
+}
+
+function exportToPDF(content) {
+  const element = document.createElement('div');
+  element.innerHTML = `<div style="font-family: sans-serif; padding: 20px;"><h1>Informe Inmobiliario</h1><div>${content}</div></div>`;
+  html2pdf().from(element).save('diagnostico_inmobiliario.pdf');
+}
+function exportToJSON(content) {
+  const data = { 
+    timestamp: new Date().toISOString(),
+    answers: answers.map((ans, idx) => ({ question: questions[idx].text, answer: questions[idx].options[ans] })),
+    report: content
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'diagnostico_inmobiliario.json';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+function shareViaWhatsApp() {
+  const text = `Acabo de realizar mi diagnóstico inmobiliario. Resultados: áreas de mejora detectadas. Pruébalo en: ${window.location.href}`;
+  window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+}
+function shareProViaWhatsApp(reportText) {
+  const shortReport = reportText.substring(0, 1000);
+  const text = `📊 *Mi informe personalizado*:\n${shortReport}\n\nGenerado con InmoDiagnóstico Pro. Pruébalo: ${window.location.href}`;
+  window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+}
+
+// --- Inicialización ---
+document.addEventListener('DOMContentLoaded', () => {
+  renderUsageBar();
+  loadSavedAnswers();
+  prevBtn.addEventListener('click', goToPrev);
+  nextBtn.addEventListener('click', goToNext);
+  // Si ya terminó antes, mostrar resultado
+  if (answers.every(a => a !== null) && !basicReportGenerated) {
+    finishDiagnostic();
+  }
+});
+</script>
+</body>
+</html>
