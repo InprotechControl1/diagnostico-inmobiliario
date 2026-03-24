@@ -16,8 +16,8 @@ Respuestas del usuario:
 ${JSON.stringify(answers, null, 2)}
 `;
 
-  const GEMINI_API_KEY = context.env.GEMINI_API_KEY;
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+	  const GEMINI_API_KEY = context.env.GEMINI_API_KEY;
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
   
   const response = await fetch(url, {
     method: 'POST',
@@ -34,3 +34,6 @@ ${JSON.stringify(answers, null, 2)}
     headers: { 'Content-Type': 'application/json' }
   });
 }
+
+
+
