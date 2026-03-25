@@ -17,8 +17,5 @@
   "bugs": {
     "url": "https://github.com/InprotechControl1/diagnostico-inmobiliario/issues"
   },
-  "homepage": "https://github.com/InprotechControl1/diagnostico-inmobiliario#readme",
-  "dependencies": {
-    "cheerio": "^1.2.0"
-  }
+  "homepage": "https://github.com/InprotechControl1/diagnostico-inmobiliario#readme"
 }
