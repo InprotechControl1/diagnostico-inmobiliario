@@ -1,1 +1,114 @@
-<h1>Próximamente: captura de propiedades</h1>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>InproShield · Captura de propiedades</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #F9FAFB;
+      --surface: #FFFFFF;
+      --surface2: #F3F4F6;
+      --border: #E5E7EB;
+      --text: #111827;
+      --muted: #6B7280;
+      --primary: #2563EB;
+      --primary-dark: #1E3A8A;
+      --serif: 'DM Serif Display', serif;
+      --sans: 'DM Sans', sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding: 2rem 1rem;
+    }
+    .wrap {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .card {
+      background: var(--surface);
+      border-radius: 28px;
+      padding: 2rem;
+      box-shadow: 0 1px 3px 0 rgba(0,0,0,0.05);
+      margin-bottom: 1.5rem;
+    }
+    h1 {
+      font-family: var(--serif);
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+    .url-input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1px solid var(--border);
+      border-radius: 40px;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+    }
+    button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 40px;
+      padding: 12px 24px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+    }
+    button:hover {
+      background: var(--primary-dark);
+    }
+    .resultado {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      border-left: 4px solid var(--primary);
+      background: var(--surface2);
+      border-radius: 16px;
+    }
+    footer {
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+    <h1>🔗 Captura propiedades desde links</h1>
+    <p>Pega el enlace de Marketplace, Instagram o cualquier portal inmobiliario y extraeremos los datos clave.</p>
+    <input type="url" id="urlInput" class="url-input" placeholder="https://...">
+    <button id="analizarBtn">Analizar y capturar</button>
+    <div id="resultado" class="resultado" style="display: none;"></div>
+  </div>
+  <footer>InproShield · Herramienta en desarrollo</footer>
+</div>
+<script>
+  document.getElementById('analizarBtn').onclick = async () => {
+    const url = document.getElementById('urlInput').value.trim();
+    if (!url) {
+      alert('Ingresa un enlace');
+      return;
+    }
+    const btn = document.getElementById('analizarBtn');
+    btn.disabled = true;
+    btn.innerText = 'Analizando...';
+    const resultadoDiv = document.getElementById('resultado');
+    resultadoDiv.style.display = 'block';
+    resultadoDiv.innerHTML = '⏳ Procesando... (simulación)';
+    // Aquí luego conectaremos con IA o función de Cloudflare
+    setTimeout(() => {
+      resultadoDiv.innerHTML = '✅ Función en construcción. Próximamente extraerá datos del enlace.';
+      btn.disabled = false;
+      btn.innerText = 'Analizar y capturar';
+    }, 1500);
+  };
+</script>
+</body>
+</html>
