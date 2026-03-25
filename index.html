@@ -4,27 +4,29 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>InproShield · Diagnóstico inmobiliario</title>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
   <style>
     :root {
-      --bg: #f8fafc;
-      --surface: #ffffff;
-      --surface2: #f1f5f9;
-      --border: #e2e8f0;
-      --border-strong: #cbd5e1;
-      --text: #0f172a;
-      --muted: #475569;
-      --muted2: #94a3b8;
-      --green: #10b981;
+      --bg: #F9FAFB;
+      --surface: #FFFFFF;
+      --surface2: #F3F4F6;
+      --border: #E5E7EB;
+      --border-strong: #D1D5DB;
+      --text: #111827;
+      --muted: #6B7280;
+      --muted2: #9CA3AF;
+      --primary: #2563EB;
+      --primary-dark: #1E3A8A;
+      --green: #10B981;
       --green-bg: rgba(16,185,129,0.08);
       --green-border: rgba(16,185,129,0.2);
-      --amber: #f59e0b;
+      --amber: #F59E0B;
       --amber-bg: rgba(245,158,11,0.08);
       --amber-border: rgba(245,158,11,0.2);
-      --red: #ef4444;
+      --red: #EF4444;
       --red-bg: rgba(239,68,68,0.08);
       --red-border: rgba(239,68,68,0.2);
-      --blue: #3b82f6;
+      --blue: #3B82F6;
       --blue-bg: rgba(59,130,246,0.08);
       --blue-border: rgba(59,130,246,0.15);
       --serif: 'DM Serif Display', serif;
@@ -36,9 +38,10 @@
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
+      line-height: 1.5;
     }
     .wrap {
-      max-width: 620px;
+      max-width: 680px;
       margin: 0 auto;
       padding: 0 1.5rem;
     }
@@ -54,22 +57,26 @@
       align-items: center;
       gap: 10px;
       font-family: var(--serif);
-      font-size: 20px;
+      font-size: 22px;
+      font-weight: 500;
       color: var(--text);
+      letter-spacing: -0.01em;
     }
     .nav-logo svg {
-      width: 28px;
-      height: 28px;
+      width: 32px;
+      height: 32px;
+      stroke: var(--primary);
+      stroke-width: 1.5;
+      fill: none;
     }
     .nav-badge {
-      font-size: 11px;
+      font-size: 12px;
       font-weight: 500;
-      color: var(--muted);
-      letter-spacing: 0.04em;
+      color: var(--primary);
       background: var(--surface2);
       border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 4px 12px;
+      border-radius: 40px;
+      padding: 6px 14px;
     }
     .hero {
       text-align: center;
@@ -77,10 +84,10 @@
     }
     .hero-eyebrow {
       font-size: 12px;
-      font-weight: 500;
+      font-weight: 600;
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: var(--muted);
+      color: var(--primary);
       margin-bottom: 1rem;
       display: flex;
       align-items: center;
@@ -91,11 +98,11 @@
       width: 6px;
       height: 6px;
       border-radius: 50%;
-      background: var(--green);
+      background: var(--primary);
     }
     .hero h1 {
       font-family: var(--serif);
-      font-size: clamp(36px, 7vw, 56px);
+      font-size: clamp(38px, 8vw, 64px);
       font-weight: 400;
       line-height: 1.1;
       color: var(--text);
@@ -103,32 +110,38 @@
     }
     .hero-sub {
       font-size: 16px;
-      font-weight: 300;
+      font-weight: 400;
       color: var(--muted);
       line-height: 1.6;
-      max-width: 440px;
+      max-width: 500px;
       margin: 0 auto;
     }
     .scan-card {
       background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 1.5rem;
+      border: none;
+      border-radius: 28px;
+      padding: 2rem;
       margin-bottom: 1.5rem;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+      transition: box-shadow 0.2s ease, transform 0.1s ease;
+    }
+    .scan-card:hover {
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
     }
     .scan-hint {
-      font-size: 11px;
-      font-weight: 500;
+      font-size: 12px;
+      font-weight: 600;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: var(--muted2);
-      margin-bottom: 12px;
+      color: var(--primary);
+      margin-bottom: 1rem;
     }
     .question-text {
-      font-size: 1.2rem;
-      font-weight: 500;
-      margin-bottom: 1rem;
+      font-size: 1.35rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
       line-height: 1.4;
+      color: var(--text);
     }
     .options-grid {
       display: flex;
@@ -139,98 +152,118 @@
     .option-btn {
       background: var(--surface2);
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 12px 16px;
+      border-radius: 20px;
+      padding: 14px 18px;
       font-family: var(--sans);
-      font-size: 14px;
-      font-weight: 400;
+      font-size: 15px;
+      font-weight: 500;
       color: var(--text);
       cursor: pointer;
       text-align: left;
-      transition: all 0.2s;
+      transition: all 0.2s ease;
     }
     .option-btn:hover {
-      border-color: var(--border-strong);
       background: var(--surface);
+      border-color: var(--primary);
+      transform: translateX(6px);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
     }
     .next-btn, .submit-btn {
-      background: var(--text);
+      background: var(--primary);
       border: none;
-      border-radius: 12px;
-      padding: 14px;
+      border-radius: 40px;
+      padding: 14px 24px;
       font-family: var(--sans);
-      font-size: 14px;
-      font-weight: 500;
+      font-size: 15px;
+      font-weight: 600;
       color: white;
       cursor: pointer;
       width: 100%;
-      transition: opacity 0.2s;
+      transition: background 0.2s, transform 0.05s;
+    }
+    .next-btn:hover, .submit-btn:hover {
+      background: var(--primary-dark);
+      transform: scale(0.98);
     }
     .next-btn:disabled, .submit-btn:disabled {
-      opacity: 0.5;
+      opacity: 0.6;
       cursor: not-allowed;
+      transform: none;
     }
     .lead-form input {
       width: 100%;
-      padding: 12px;
-      margin-bottom: 12px;
+      padding: 14px 16px;
+      margin-bottom: 14px;
       border: 1px solid var(--border);
-      border-radius: 12px;
+      border-radius: 20px;
       font-family: var(--sans);
-      font-size: 14px;
+      font-size: 15px;
       background: var(--surface);
+      transition: border-color 0.2s;
+    }
+    .lead-form input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
     }
     .result-zone {
       margin-top: 1.5rem;
     }
     .verdict-card {
       background: var(--surface);
-      border-left: 4px solid var(--green);
-      border-radius: 14px;
+      border-left: 6px solid var(--primary);
+      border-radius: 20px;
       padding: 1.5rem;
-      margin-bottom: 1rem;
+      margin-bottom: 1.25rem;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
     }
     .panel-full {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 1.25rem;
-      margin-bottom: 1rem;
+      border-radius: 20px;
+      padding: 1.5rem;
+      margin-bottom: 1.25rem;
     }
     .panel-title {
-      font-size: 10px;
-      font-weight: 500;
+      font-size: 11px;
+      font-weight: 700;
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: var(--muted2);
+      color: var(--primary);
       margin-bottom: 1rem;
     }
     .rec-card {
       background: var(--surface2);
-      border-radius: 14px;
-      padding: 1.5rem;
+      border-radius: 20px;
+      padding: 1.75rem;
       margin-top: 1rem;
       text-align: center;
+      border: 1px solid var(--border);
     }
     .wa-btn {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
       background: #25d36610;
       border: 1px solid #25d36630;
-      border-radius: 12px;
-      padding: 12px 24px;
+      border-radius: 40px;
+      padding: 12px 28px;
       color: #25d366;
       text-decoration: none;
-      font-weight: 500;
+      font-weight: 600;
       margin-top: 1rem;
+      transition: all 0.2s;
+    }
+    .wa-btn:hover {
+      background: #25d36620;
+      transform: scale(1.02);
     }
     footer {
       margin-top: 4rem;
       padding: 2rem 0 3rem;
       border-top: 1px solid var(--border);
       text-align: center;
-      font-size: 11px;
+      font-size: 12px;
       color: var(--muted2);
     }
     .hidden {
@@ -243,8 +276,8 @@
   <nav>
     <div class="nav-logo">
       <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 2L3 6.5V13C3 18 12 22 12 22C12 22 21 18 21 13V6.5L12 2Z" fill="rgba(15,23,42,0.1)" stroke="#0f172a" stroke-width="1.2"/>
-        <path d="M8.5 12L11 14.5L15.5 10" stroke="#0f172a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M12 2L3 6.5V13C3 18 12 22 12 22C12 22 21 18 21 13V6.5L12 2Z" stroke="currentColor" stroke-width="1.2"/>
+        <path d="M8.5 12L11 14.5L15.5 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
       InproShield
     </div>
@@ -271,15 +304,15 @@
   <!-- Formulario de contacto (inicialmente oculto) -->
   <div id="leadFormContainer" class="scan-card hidden">
     <div class="scan-hint">¡Casi listo!</div>
-    <h3 style="font-family:var(--serif); margin-bottom: 0.5rem;">Recibe tu diagnóstico personalizado</h3>
-    <p style="margin-bottom: 1.5rem; color: var(--muted);">Ingresa tus datos y descubre las áreas de mejora de tu agencia, junto con recomendaciones exclusivas de InproShield.</p>
-    <form id="leadForm">
+    <h3 style="font-family:var(--serif); margin-bottom: 0.75rem; font-size: 1.6rem;">Recibe tu diagnóstico personalizado</h3>
+    <p style="margin-bottom: 1.75rem; color: var(--muted);">Ingresa tus datos y descubre las áreas de mejora de tu agencia, junto con recomendaciones exclusivas de InproShield.</p>
+    <form id="leadForm" class="lead-form">
       <input type="text" id="leadName" placeholder="Nombre completo" required>
       <input type="email" id="leadEmail" placeholder="Correo electrónico" required>
       <input type="tel" id="leadPhone" placeholder="Teléfono / WhatsApp" required>
       <button type="submit" class="submit-btn">Ver mi informe →</button>
     </form>
-    <p style="font-size: 12px; color: var(--muted2); margin-top: 1rem;">Usamos tus datos para enviarte el informe y luego contactarte con opciones de mejora.</p>
+    <p style="font-size: 12px; color: var(--muted2); margin-top: 1.5rem;">Usamos tus datos para enviarte el informe y luego contactarte con opciones de mejora.</p>
   </div>
 
   <!-- Zona de resultados -->
@@ -338,7 +371,6 @@
 
   function loadQuestion() {
     if (currentStep >= questions.length) {
-      // Terminó el cuestionario: ocultar preguntas y mostrar formulario de contacto
       quizContainer.classList.add('hidden');
       leadFormContainer.classList.remove('hidden');
       return;
@@ -353,9 +385,7 @@
       btn.className = 'option-btn';
       btn.innerText = opt;
       btn.onclick = () => {
-        // Guardar respuesta
         answers[currentStep] = opt;
-        // Avanzar
         currentStep++;
         loadQuestion();
       };
@@ -364,7 +394,6 @@
   }
 
   nextButton.onclick = () => {
-    // Si no hay respuesta seleccionada, no hace nada
     if (answers[currentStep] === undefined) {
       alert("Por favor selecciona una opción.");
       return;
@@ -373,7 +402,6 @@
     loadQuestion();
   };
 
-  // Iniciar cuestionario
   loadQuestion();
 
   // ----- ENVÍO DE FORMULARIO DE CONTACTO -----
@@ -389,17 +417,11 @@
       return;
     }
 
-    // Deshabilitar botón mientras se envía
     const submitBtn = leadForm.querySelector('button');
     submitBtn.disabled = true;
     submitBtn.innerText = 'Enviando...';
 
-    const leadData = {
-      name,
-      email,
-      phone,
-      diagnostic: answers  // array con las respuestas
-    };
+    const leadData = { name, email, phone, diagnostic: answers };
 
     try {
       const response = await fetch('/api/lead', {
@@ -409,7 +431,6 @@
       });
       const result = await response.json();
       if (result.success) {
-        // Mostrar informe simplificado
         mostrarInforme(answers);
         leadFormContainer.classList.add('hidden');
       } else {
@@ -425,7 +446,6 @@
   });
 
   function mostrarInforme(respuestas) {
-    // Generar áreas de mejora según las respuestas
     const areas = [];
     if (respuestas[0]?.includes('Otro') || respuestas[0]?.includes('no tengo')) {
       areas.push("📈 Captación: definir un proceso claro para obtener leads.");
@@ -451,13 +471,13 @@
 
     if (areas.length === 0) areas.push("🔍 Sigue potenciando tu agencia con tecnología avanzada.");
 
-    const areasHtml = areas.map(a => `<li style="margin-bottom: 10px;">${a}</li>`).join('');
+    const areasHtml = areas.map(a => `<li style="margin-bottom: 12px; display: flex; gap: 8px; align-items: baseline;"><span style="font-size: 1.2rem;">•</span> ${a}</li>`).join('');
 
     resultZone.innerHTML = `
       <div class="verdict-card">
         <div class="verdict-body">
-          <h2 style="font-family:var(--serif);">Tu diagnóstico InproShield</h2>
-          <p style="margin-top: 8px;">Según tus respuestas, estos son los puntos clave donde puedes potenciar tu agencia:</p>
+          <h2 style="font-family:var(--serif); font-size: 1.8rem; margin-bottom: 0.5rem;">Tu diagnóstico InproShield</h2>
+          <p style="color: var(--muted);">Según tus respuestas, estos son los puntos clave donde puedes potenciar tu agencia:</p>
         </div>
       </div>
       <div class="panel-full">
@@ -465,7 +485,7 @@
         <ul style="list-style: none; padding-left: 0;">${areasHtml}</ul>
       </div>
       <div class="rec-card">
-        <strong>🔐 ¿Cómo lograr estos cambios?</strong><br/>
+        <strong style="font-size: 1.1rem;">🔐 ¿Cómo lograr estos cambios?</strong><br/>
         Con <strong>InproShield</strong> puedes automatizar la captación, gestionar propiedades desde WhatsApp y obtener reportes de rendimiento. Nuestros planes de apoyo incluyen asesoría personalizada y herramientas digitales diseñadas para agentes venezolanos.
         <div style="margin-top: 1rem;">
           <a href="https://api.whatsapp.com/send/?phone=584245095506&text=Quiero+mejorar+mi+agencia+con+InproShield&type=phone_number&app_absent=0" class="wa-btn">📲 Contáctanos por WhatsApp</a>
