@@ -11,7 +11,7 @@ export async function onRequest(context) {
       return new Response(JSON.stringify({ error: 'Falta URL' }), { status: 400 });
     }
 
-    // 1. Obtener el contenido de la URL con un User-Agent realista
+    // 1. Obtener el contenido de la URL
     const htmlResponse = await fetch(url, {
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
@@ -24,11 +24,15 @@ export async function onRequest(context) {
     const html = await htmlResponse.text();
     console.log(`HTML obtenido (primeros 500 chars): ${html.slice(0, 500)}`);
 
-    // 2. Llamar a Gemini para extraer datos
+    // 2. Llamar a Gemini
     const GEMINI_API_KEY = env.GEMINI_API_KEY;
     if (!GEMINI_API_KEY) {
       throw new Error('API Key de Gemini no configurada');
     }
+
+    // Usar la API v1 con modelo gemini-1.5-flash (o gemini-pro como respaldo)
+    let model = 'gemini-1.5-flash';
+    let apiUrl = `https://generativelanguage.googleapis.com/v1/models/${model}:generateContent?key=${GEMINI_API_KEY}`;
 
     const prompt = `
 Eres un asistente experto en extraer información de propiedades inmobiliarias a partir del HTML de una página web.
@@ -47,17 +51,29 @@ HTML:
 ${html.slice(0, 35000)}
 `;
 
-    const geminiResponse = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`,
-      {
+    let geminiResponse = await fetch(apiUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: { temperature: 0.2, maxOutputTokens: 1024 }
+      })
+    });
+
+    // Si falla con gemini-1.5-flash, probar con gemini-pro
+    if (!geminiResponse.ok && geminiResponse.status === 404) {
+      console.log('Modelo gemini-1.5-flash no encontrado, probando con gemini-pro');
+      model = 'gemini-pro';
+      apiUrl = `https://generativelanguage.googleapis.com/v1/models/${model}:generateContent?key=${GEMINI_API_KEY}`;
+      geminiResponse = await fetch(apiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           contents: [{ parts: [{ text: prompt }] }],
           generationConfig: { temperature: 0.2, maxOutputTokens: 1024 }
         })
-      }
-    );
+      });
+    }
 
     const geminiData = await geminiResponse.json();
     if (!geminiResponse.ok) {
@@ -68,7 +84,6 @@ ${html.slice(0, 35000)}
     let extractedText = geminiData.candidates[0].content.parts[0].text;
     console.log('Gemini raw response:', extractedText);
 
-    // Limpiar marcadores de código
     extractedText = extractedText.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
     const extracted = JSON.parse(extractedText);
 
