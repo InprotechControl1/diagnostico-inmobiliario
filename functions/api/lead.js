@@ -26,7 +26,7 @@ export async function onRequest(context) {
       .run();
 
     // 2. Enviar a Google Sheets (sin bloquear la respuesta final)
-    const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbz0GIr1_1xGeLsgRPfVBkcpAFpUu9C2c-FDWBTPs-96Q7dIg0wuZyG-gjpl3biOGxYf/exec';
+    const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbwDRmphfv6UwVv5pev2GiVTJx6ifJR0ikYmp-x9EVhi807vzGpE9lMwPfepNI7MQh96/exec';
     
     context.waitUntil(
       fetch(SHEETS_URL, {
