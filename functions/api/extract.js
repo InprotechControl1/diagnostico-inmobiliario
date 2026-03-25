@@ -24,7 +24,7 @@ export async function onRequest(context) {
     const html = await htmlResponse.text();
     console.log(`HTML obtenido (primeros 500 chars): ${html.slice(0, 500)}`);
 
-    // 2. Llamar a Gemini con el modelo gemini-pro (API v1)
+    // 2. Llamar a Gemini con el modelo gemini-2.0-flash
     const GEMINI_API_KEY = env.GEMINI_API_KEY;
     if (!GEMINI_API_KEY) {
       throw new Error('API Key de Gemini no configurada');
@@ -48,7 +48,7 @@ ${html.slice(0, 35000)}
 `;
 
     const geminiResponse = await fetch(
-      `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${GEMINI_API_KEY}`,
+      `https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
