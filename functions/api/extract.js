@@ -1,7 +1,5 @@
-import { load } from 'cheerio';
-
 export async function onRequest(context) {
-  const { request, env } = context;
+  const { request } = context;
 
   if (request.method !== 'POST') {
     return new Response('Método no permitido', { status: 405 });
@@ -13,43 +11,43 @@ export async function onRequest(context) {
       return new Response(JSON.stringify({ error: 'Falta URL' }), { status: 400 });
     }
 
-    // Obtener el HTML
     const htmlResponse = await fetch(url, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
-      }
+      headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' }
     });
     if (!htmlResponse.ok) {
       throw new Error(`Error al obtener la página: ${htmlResponse.status}`);
     }
     const html = await htmlResponse.text();
 
-    // Extraer datos con cheerio
-    const $ = load(html);
-    let titulo = $('h1').first().text().trim() || $('title').text().trim();
-    let precio = $('[itemprop="price"]').text().trim() || $('.price').first().text().trim() || $('.precio').first().text().trim();
-    let ubicacion = $('[itemprop="address"]').text().trim() || $('.location').first().text().trim() || $('.ubicacion').first().text().trim();
-    let descripcion = $('[itemprop="description"]').text().trim() || $('.description').first().text().trim();
-    if (!descripcion) {
-      descripcion = $('p').filter((i, el) => $(el).text().length > 100).first().text().trim();
-    }
+    // Extracción con regex
+    let titulo = html.match(/<h1[^>]*>([^<]+)<\/h1>/i)?.[1] || html.match(/<title>([^<]+)<\/title>/i)?.[1] || '';
+    titulo = titulo.trim();
 
-    // Extraer imágenes
+    let precio = html.match(/U\$D\s*([\d.,]+)/i)?.[0] || html.match(/Precio[:\s]*([^\n<]+)/i)?.[1] || '';
+    precio = precio.trim();
+
+    let ubicacion = html.match(/Ubicación<\/[^>]+>\s*<[^>]+>\s*([^<]+)/i)?.[1] || '';
+    ubicacion = ubicacion.trim();
+
+    let descripcion = html.match(/Descripción<\/[^>]+>\s*<[^>]+>\s*<p>([^<]+)/i)?.[1] || '';
+    descripcion = descripcion.replace(/<[^>]*>/g, '').trim().substring(0, 200);
+
     const imagenes = [];
-    $('img').each((i, el) => {
-      const src = $(el).attr('src');
+    const imgRegex = /<img[^>]+src="([^"]+)"[^>]*>/gi;
+    let match;
+    while ((match = imgRegex.exec(html)) !== null) {
+      let src = match[1];
       if (src && src.startsWith('http') && !src.includes('logo') && !src.includes('icon')) {
         imagenes.push(src);
+        if (imagenes.length >= 3) break;
       }
-      if (imagenes.length >= 3) return false;
-    });
+    }
 
-    // Limpiar y estructurar
     const data = {
       titulo: titulo || null,
       precio: precio || null,
       ubicacion: ubicacion || null,
-      descripcion: descripcion.substring(0, 200) || null,
+      descripcion: descripcion || null,
       imagenes: imagenes.slice(0, 3)
     };
 
