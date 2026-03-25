@@ -24,7 +24,7 @@ export async function onRequest(context) {
     const html = await htmlResponse.text();
     console.log(`HTML obtenido (primeros 500 chars): ${html.slice(0, 500)}`);
 
-    // 2. Llamar a Gemini con el modelo correcto
+    // 2. Llamar a Gemini con el modelo gemini-pro (API v1)
     const GEMINI_API_KEY = env.GEMINI_API_KEY;
     if (!GEMINI_API_KEY) {
       throw new Error('API Key de Gemini no configurada');
@@ -47,9 +47,8 @@ HTML:
 ${html.slice(0, 35000)}
 `;
 
-    // Usar modelo gemini-1.0-pro con API v1
     const geminiResponse = await fetch(
-      `https://generativelanguage.googleapis.com/v1/models/gemini-1.0-pro:generateContent?key=${GEMINI_API_KEY}`,
+      `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${GEMINI_API_KEY}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
