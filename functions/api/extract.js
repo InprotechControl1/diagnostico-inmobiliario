@@ -11,6 +11,7 @@ export async function onRequest(context) {
       return new Response(JSON.stringify({ error: 'Falta URL' }), { status: 400 });
     }
 
+    // Obtener HTML
     const htmlResponse = await fetch(url, {
       headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' }
     });
@@ -19,19 +20,32 @@ export async function onRequest(context) {
     }
     const html = await htmlResponse.text();
 
-    // Extracción con regex
-    let titulo = html.match(/<h1[^>]*>([^<]+)<\/h1>/i)?.[1] || html.match(/<title>([^<]+)<\/title>/i)?.[1] || '';
+    // --- Extracción con expresiones regulares ---
+    let titulo = html.match(/<h1[^>]*>([^<]+)<\/h1>/i)?.[1] || 
+                 html.match(/<title>([^<]+)<\/title>/i)?.[1] || '';
     titulo = titulo.trim();
 
-    let precio = html.match(/U\$D\s*([\d.,]+)/i)?.[0] || html.match(/Precio[:\s]*([^\n<]+)/i)?.[1] || '';
+    let precio = html.match(/U\$D\s*([\d.,]+)/i)?.[0] || 
+                 html.match(/Precio[:\s]*([^\n<]+)/i)?.[1] || '';
     precio = precio.trim();
 
-    let ubicacion = html.match(/Ubicación<\/[^>]+>\s*<[^>]+>\s*([^<]+)/i)?.[1] || '';
+    // Ubicación: buscar después de "Ubicación"
+    let ubicacion = html.match(/Ubicaci[óo]n<\/[^>]+>\s*<[^>]+>\s*([^<]+)/i)?.[1] || '';
+    if (!ubicacion) {
+      const ubicMatch = html.match(/Ubicaci[óo]n[\s\S]*?<p[^>]*>([^<]+)</i);
+      ubicacion = ubicMatch ? ubicMatch[1].trim() : '';
+    }
     ubicacion = ubicacion.trim();
 
-    let descripcion = html.match(/Descripción<\/[^>]+>\s*<[^>]+>\s*<p>([^<]+)/i)?.[1] || '';
+    // Descripción: buscar después de "Descripción"
+    let descripcion = html.match(/Descripci[óo]n<\/[^>]+>\s*<[^>]+>\s*<p>([^<]+)/i)?.[1] || '';
+    if (!descripcion) {
+      const descMatch = html.match(/Descripci[óo]n[\s\S]*?<p[^>]*>([^<]+)</i);
+      descripcion = descMatch ? descMatch[1].trim() : '';
+    }
     descripcion = descripcion.replace(/<[^>]*>/g, '').trim().substring(0, 200);
 
+    // Extraer imágenes
     const imagenes = [];
     const imgRegex = /<img[^>]+src="([^"]+)"[^>]*>/gi;
     let match;
