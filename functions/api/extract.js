@@ -20,16 +20,24 @@ export async function onRequest(context) {
     }
     const html = await htmlResponse.text();
 
+    // Detectar si la página es una pantalla de login o carga dinámica
+    if (html.match(/iniciar sesión|acceder|login|sign in/i) && !html.match(/precio|ubicación|descripción/i)) {
+      return new Response(JSON.stringify({
+        success: false,
+        error: 'Este portal requiere autenticación o carga datos con JavaScript. Prueba con un enlace de un portal que muestre la información sin iniciar sesión (ej. BienesOnline, OLX).'
+      }), { status: 400, headers: { 'Content-Type': 'application/json' } });
+    }
+
     // --- Extracción con expresiones regulares ---
-    let titulo = html.match(/<h1[^>]*>([^<]+)<\/h1>/i)?.[1] || 
+    let titulo = html.match(/<h1[^>]*>([^<]+)<\/h1>/i)?.[1] ||
                  html.match(/<title>([^<]+)<\/title>/i)?.[1] || '';
     titulo = titulo.trim();
 
-    let precio = html.match(/U\$D\s*([\d.,]+)/i)?.[0] || 
+    let precio = html.match(/U\$D\s*([\d.,]+)/i)?.[0] ||
                  html.match(/Precio[:\s]*([^\n<]+)/i)?.[1] || '';
     precio = precio.trim();
 
-    // Ubicación: buscar después de "Ubicación"
+    // Ubicación
     let ubicacion = html.match(/Ubicaci[óo]n<\/[^>]+>\s*<[^>]+>\s*([^<]+)/i)?.[1] || '';
     if (!ubicacion) {
       const ubicMatch = html.match(/Ubicaci[óo]n[\s\S]*?<p[^>]*>([^<]+)</i);
@@ -37,7 +45,7 @@ export async function onRequest(context) {
     }
     ubicacion = ubicacion.trim();
 
-    // Descripción: buscar después de "Descripción"
+    // Descripción
     let descripcion = html.match(/Descripci[óo]n<\/[^>]+>\s*<[^>]+>\s*<p>([^<]+)/i)?.[1] || '';
     if (!descripcion) {
       const descMatch = html.match(/Descripci[óo]n[\s\S]*?<p[^>]*>([^<]+)</i);
@@ -45,7 +53,7 @@ export async function onRequest(context) {
     }
     descripcion = descripcion.replace(/<[^>]*>/g, '').trim().substring(0, 200);
 
-    // Extraer imágenes
+    // Imágenes
     const imagenes = [];
     const imgRegex = /<img[^>]+src="([^"]+)"[^>]*>/gi;
     let match;
