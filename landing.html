@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>InproShield · Potencia tu negocio inmobiliario</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #F9FAFB; --surface: #FFFFFF; --border: #E5E7EB;
+      --text: #111827; --primary: #2563EB; --primary-dark: #1E3A8A;
+      --serif: 'DM Serif Display', serif; --sans: 'DM Sans', sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    .wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+    .hero {
+      text-align: center;
+      padding: 4rem 1rem;
+    }
+    .hero h1 {
+      font-family: var(--serif);
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+    .hero p {
+      font-size: 1.2rem;
+      color: var(--muted);
+      max-width: 600px;
+      margin: 0 auto 2rem;
+    }
+    .btn {
+      background: var(--primary);
+      color: white;
+      padding: 12px 28px;
+      border-radius: 40px;
+      text-decoration: none;
+      font-weight: 600;
+      display: inline-block;
+    }
+    .btn:hover { background: var(--primary-dark); }
+    .plans {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+      margin-top: 3rem;
+    }
+    .plan-card {
+      background: var(--surface);
+      border-radius: 28px;
+      padding: 2rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      width: 280px;
+      text-align: center;
+    }
+    .price {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin: 1rem 0;
+    }
+    .features {
+      list-style: none;
+      padding: 0;
+      margin: 1.5rem 0;
+    }
+    .features li {
+      margin: 0.5rem 0;
+    }
+    footer {
+      text-align: center;
+      margin-top: 4rem;
+      color: #6B7280;
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hero">
+    <h1>InproShield</h1>
+    <p>Automatiza la captación de propiedades, gestiona leads y obtén reportes de rendimiento.</p>
+    <a href="/auth" class="btn">Comenzar gratis</a>
+  </div>
+  <div class="plans">
+    <div class="plan-card">
+      <h3>Gratuito</h3>
+      <div class="price">$0</div>
+      <ul class="features">
+        <li>✅ Diagnóstico inmobiliario</li>
+        <li>✅ Encuesta de dolores</li>
+        <li>✅ 5 propiedades/mes</li>
+      </ul>
+      <a href="/auth" class="btn">Registrarse</a>
+    </div>
+    <div class="plan-card">
+      <h3>Pro</h3>
+      <div class="price">$9 <span style="font-size:1rem">/mes</span></div>
+      <ul class="features">
+        <li>✅ Todo lo gratuito</li>
+        <li>✅ Propiedades ilimitadas</li>
+        <li>✅ Dashboard avanzado</li>
+        <li>✅ Reportes de rendimiento</li>
+        <li>✅ Soporte prioritario</li>
+      </ul>
+      <a href="/auth" class="btn">Probar Pro</a>
+    </div>
+  </div>
+  <footer>
+    &copy; 2026 InproShield · Herramientas para agentes inmobiliarios
+  </footer>
+</div>
+</body>
+</html>

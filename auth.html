@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>InproShield · Acceso</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #F9FAFB; --surface: #FFFFFF; --border: #E5E7EB;
+      --text: #111827; --primary: #2563EB; --primary-dark: #1E3A8A;
+      --serif: 'DM Serif Display', serif; --sans: 'DM Sans', sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      padding: 2rem 1rem;
+    }
+    .wrap { max-width: 500px; margin: 0 auto; }
+    .card {
+      background: var(--surface);
+      border-radius: 28px;
+      padding: 2rem;
+      box-shadow: 0 1px 3px 0 rgba(0,0,0,0.05);
+    }
+    h1 {
+      font-family: var(--serif);
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    .input-group { margin-bottom: 1rem; }
+    input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid var(--border);
+      border-radius: 40px;
+      font-size: 1rem;
+    }
+    button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 40px;
+      padding: 12px;
+      font-weight: 600;
+      width: 100%;
+      cursor: pointer;
+      margin-top: 0.5rem;
+    }
+    button:hover { background: var(--primary-dark); }
+    .toggle {
+      text-align: center;
+      margin-top: 1rem;
+      font-size: 0.9rem;
+    }
+    .toggle a {
+      color: var(--primary);
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .error {
+      color: red;
+      font-size: 0.8rem;
+      margin-top: 0.5rem;
+      text-align: center;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+    <h1>InproShield</h1>
+    <div id="formContainer">
+      <input type="email" id="email" placeholder="Correo electrónico" required>
+      <input type="password" id="password" placeholder="Contraseña" required>
+      <button id="actionBtn">Iniciar sesión</button>
+      <div class="toggle">
+        ¿No tienes cuenta? <a id="toggleBtn">Regístrate</a>
+      </div>
+      <div id="errorMsg" class="error"></div>
+    </div>
+  </div>
+</div>
+<script>
+  const supabase = supabaseJs.createClient(
+    'https://ydebmkwzmdcurtmvkzuc.supabase.co',
+    'sb_publishable_yTCduTW0oNqQnY5AM1WXXw_N4Y'
+  );
+  let isLogin = true;
+
+  const emailInput = document.getElementById('email');
+  const passwordInput = document.getElementById('password');
+  const actionBtn = document.getElementById('actionBtn');
+  const toggleBtn = document.getElementById('toggleBtn');
+  const errorDiv = document.getElementById('errorMsg');
+
+  async function handleAuth() {
+    errorDiv.innerText = '';
+    const email = emailInput.value.trim();
+    const password = passwordInput.value.trim();
+    if (!email || !password) {
+      errorDiv.innerText = 'Completa todos los campos';
+      return;
+    }
+    let result;
+    if (isLogin) {
+      result = await supabase.auth.signInWithPassword({ email, password });
+    } else {
+      result = await supabase.auth.signUp({ email, password });
+    }
+    if (result.error) {
+      errorDiv.innerText = result.error.message;
+    } else {
+      // Guardar sesión y redirigir a dashboard
+      window.location.href = '/dashboard';
+    }
+  }
+
+  actionBtn.onclick = handleAuth;
+  toggleBtn.onclick = () => {
+    isLogin = !isLogin;
+    actionBtn.innerText = isLogin ? 'Iniciar sesión' : 'Registrarse';
+    toggleBtn.innerText = isLogin ? 'Regístrate' : '¿Ya tienes cuenta? Inicia sesión';
+  };
+</script>
+</body>
+</html>

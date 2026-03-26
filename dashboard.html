@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>InproShield · Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #F9FAFB; --surface: #FFFFFF; --border: #E5E7EB;
+      --text: #111827; --primary: #2563EB; --primary-dark: #1E3A8A;
+      --serif: 'DM Serif Display', serif; --sans: 'DM Sans', sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      padding: 2rem 1rem;
+    }
+    .wrap {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+    .card {
+      background: var(--surface);
+      border-radius: 28px;
+      padding: 1.5rem;
+      box-shadow: 0 1px 3px 0 rgba(0,0,0,0.05);
+      margin-bottom: 1.5rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      text-align: left;
+      padding: 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .btn-logout {
+      background: #ef4444;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 40px;
+      cursor: pointer;
+    }
+    .loading {
+      text-align: center;
+      padding: 2rem;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Dashboard</h1>
+    <button class="btn-logout" id="logoutBtn">Cerrar sesión</button>
+  </header>
+  <div class="card">
+    <h2>Mis propiedades capturadas</h2>
+    <div id="propertiesContainer" class="loading">Cargando...</div>
+  </div>
+</div>
+<script>
+  const supabase = supabaseJs.createClient(
+    'https://ydebmkwzmdcurtmvkzuc.supabase.co',
+    'sb_publishable_yTCduTW0oNqQnY5AM1WXXw_N4Y'
+  );
+
+  async function checkSession() {
+    const { data: { session }, error } = await supabase.auth.getSession();
+    if (error || !session) {
+      window.location.href = '/auth';
+      return null;
+    }
+    return session.access_token;
+  }
+
+  async function fetchProperties(token) {
+    const response = await fetch('/api/my-properties', {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    if (!response.ok) {
+      throw new Error('Error al obtener propiedades');
+    }
+    const result = await response.json();
+    return result.data || [];
+  }
+
+  function renderProperties(properties) {
+    const container = document.getElementById('propertiesContainer');
+    if (!properties.length) {
+      container.innerHTML = '<p>No has capturado ninguna propiedad aún. <a href="/p">Capturar ahora</a></p>';
+      return;
+    }
+    let html = '<table><thead><tr><th>Título</th><th>Precio</th><th>Ubicación</th><th>Fecha</th></tr></thead><tbody>';
+    properties.forEach(prop => {
+      const fecha = new Date(prop.fecha).toLocaleDateString();
+      html += `<tr>
+        <td>${prop.titulo || 'Sin título'}</td>
+        <td>${prop.precio || '-'}</td>
+        <td>${prop.ubicacion || '-'}</td>
+        <td>${fecha}</td>
+      </tr>`;
+    });
+    html += '</tbody></table>';
+    container.innerHTML = html;
+  }
+
+  async function loadDashboard() {
+    const token = await checkSession();
+    if (!token) return;
+    try {
+      const properties = await fetchProperties(token);
+      renderProperties(properties);
+    } catch (err) {
+      document.getElementById('propertiesContainer').innerHTML = `<p>Error: ${err.message}</p>`;
+    }
+  }
+
+  document.getElementById('logoutBtn').onclick = async () => {
+    await supabase.auth.signOut();
+    window.location.href = '/landing';
+  };
+
+  loadDashboard();
+</script>
+</body>
+</html>
