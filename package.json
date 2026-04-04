@@ -17,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/InprotechControl1/diagnostico-inmobiliario/issues"
   },
-  "homepage": "https://github.com/InprotechControl1/diagnostico-inmobiliario#readme"
+  "homepage": "https://github.com/InprotechControl1/diagnostico-inmobiliario#readme",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0"
+  }
 }
