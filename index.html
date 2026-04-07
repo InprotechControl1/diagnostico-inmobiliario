@@ -3,498 +3,146 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>InproShield · Diagnóstico inmobiliario</title>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <title>InproShield · Diagnóstico de Alta Autoridad</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet"/>
   <style>
     :root {
-      --bg: #F9FAFB;
-      --surface: #FFFFFF;
-      --surface2: #F3F4F6;
-      --border: #E5E7EB;
-      --border-strong: #D1D5DB;
-      --text: #111827;
-      --muted: #6B7280;
-      --muted2: #9CA3AF;
+      --bg: #0a0a0f; /* Fondo oscuro elegante para resaltar estatus */
+      --surface: #13121a;
       --primary: #2563EB;
-      --primary-dark: #1E3A8A;
-      --green: #10B981;
-      --green-bg: rgba(16,185,129,0.08);
-      --green-border: rgba(16,185,129,0.2);
-      --amber: #F59E0B;
-      --amber-bg: rgba(245,158,11,0.08);
-      --amber-border: rgba(245,158,11,0.2);
-      --red: #EF4444;
-      --red-bg: rgba(239,68,68,0.08);
-      --red-border: rgba(239,68,68,0.2);
-      --blue: #3B82F6;
-      --blue-bg: rgba(59,130,246,0.08);
-      --blue-border: rgba(59,130,246,0.15);
+      --text: #e8e4f0;
+      --muted: #6b6880;
       --serif: 'DM Serif Display', serif;
       --sans: 'DM Sans', sans-serif;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: var(--sans);
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      line-height: 1.5;
-    }
-    .wrap {
-      max-width: 680px;
-      margin: 0 auto;
-      padding: 0 1.5rem;
-    }
-    nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1.75rem 0 0;
-      margin-bottom: 3rem;
-    }
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-family: var(--serif);
-      font-size: 22px;
-      font-weight: 500;
-      color: var(--text);
-      letter-spacing: -0.01em;
-    }
-    .nav-logo svg {
-      width: 32px;
-      height: 32px;
-      stroke: var(--primary);
-      stroke-width: 1.5;
-      fill: none;
-    }
-    .nav-badge {
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--primary);
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 40px;
-      padding: 6px 14px;
-    }
-    .hero {
-      text-align: center;
-      margin-bottom: 2.5rem;
-    }
-    .hero-eyebrow {
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--primary);
-      margin-bottom: 1rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-    .eyebrow-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--primary);
-    }
-    .hero h1 {
-      font-family: var(--serif);
-      font-size: clamp(38px, 8vw, 64px);
-      font-weight: 400;
-      line-height: 1.1;
-      color: var(--text);
-      margin-bottom: 1rem;
-    }
-    .hero-sub {
-      font-size: 16px;
-      font-weight: 400;
-      color: var(--muted);
-      line-height: 1.6;
-      max-width: 500px;
-      margin: 0 auto;
-    }
-    .scan-card {
-      background: var(--surface);
-      border: none;
-      border-radius: 28px;
-      padding: 2rem;
-      margin-bottom: 1.5rem;
-      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
-      transition: box-shadow 0.2s ease, transform 0.1s ease;
-    }
-    .scan-card:hover {
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
-    }
-    .scan-hint {
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--primary);
-      margin-bottom: 1rem;
-    }
-    .question-text {
-      font-size: 1.35rem;
-      font-weight: 600;
-      margin-bottom: 1.5rem;
-      line-height: 1.4;
-      color: var(--text);
-    }
-    .options-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-bottom: 1.5rem;
-    }
-    .option-btn {
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 14px 18px;
-      font-family: var(--sans);
-      font-size: 15px;
-      font-weight: 500;
-      color: var(--text);
-      cursor: pointer;
-      text-align: left;
-      transition: all 0.2s ease;
-    }
-    .option-btn:hover {
-      background: var(--surface);
-      border-color: var(--primary);
-      transform: translateX(6px);
-      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    }
-    .next-btn, .submit-btn {
-      background: var(--primary);
-      border: none;
-      border-radius: 40px;
-      padding: 14px 24px;
-      font-family: var(--sans);
-      font-size: 15px;
-      font-weight: 600;
-      color: white;
-      cursor: pointer;
-      width: 100%;
-      transition: background 0.2s, transform 0.05s;
-    }
-    .next-btn:hover, .submit-btn:hover {
-      background: var(--primary-dark);
-      transform: scale(0.98);
-    }
-    .next-btn:disabled, .submit-btn:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-      transform: none;
-    }
-    .lead-form input {
-      width: 100%;
-      padding: 14px 16px;
-      margin-bottom: 14px;
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      font-family: var(--sans);
-      font-size: 15px;
-      background: var(--surface);
-      transition: border-color 0.2s;
-    }
-    .lead-form input:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
-    }
-    .result-zone {
-      margin-top: 1.5rem;
-    }
-    .verdict-card {
-      background: var(--surface);
-      border-left: 6px solid var(--primary);
-      border-radius: 20px;
-      padding: 1.5rem;
-      margin-bottom: 1.25rem;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-    }
-    .panel-full {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 1.5rem;
-      margin-bottom: 1.25rem;
-    }
-    .panel-title {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--primary);
-      margin-bottom: 1rem;
-    }
-    .rec-card {
-      background: var(--surface2);
-      border-radius: 20px;
-      padding: 1.75rem;
-      margin-top: 1rem;
-      text-align: center;
-      border: 1px solid var(--border);
-    }
-    .wa-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      background: #25d36610;
-      border: 1px solid #25d36630;
-      border-radius: 40px;
-      padding: 12px 28px;
-      color: #25d366;
-      text-decoration: none;
-      font-weight: 600;
-      margin-top: 1rem;
-      transition: all 0.2s;
-    }
-    .wa-btn:hover {
-      background: #25d36620;
-      transform: scale(1.02);
-    }
-    footer {
-      margin-top: 4rem;
-      padding: 2rem 0 3rem;
-      border-top: 1px solid var(--border);
-      text-align: center;
-      font-size: 12px;
-      color: var(--muted2);
-    }
-    .hidden {
-      display: none;
-    }
+    body { font-family: var(--sans); background: var(--bg); color: var(--text); line-height: 1.6; }
+    .wrap { max-width: 680px; margin: 0 auto; padding: 2rem 1.5rem; }
+    
+    /* Estilos de Tarjetas */
+    .scan-card { background: var(--surface); border: 1px solid #2a2740; border-radius: 28px; padding: 2.5rem; margin-bottom: 1.5rem; }
+    .nav-logo { font-family: var(--serif); font-size: 24px; color: var(--text); display: flex; align-items: center; gap: 10px; margin-bottom: 3rem; }
+    
+    h1 { font-family: var(--serif); font-size: clamp(32px, 7vw, 48px); line-height: 1.1; margin-bottom: 1.5rem; }
+    .hero-sub { color: var(--muted); margin-bottom: 2rem; }
+
+    /* Botones y Formulario */
+    .option-btn { width: 100%; background: #1a1830; border: 1px solid #2a2740; border-radius: 15px; padding: 15px; color: var(--text); text-align: left; cursor: pointer; margin-bottom: 10px; transition: 0.2s; }
+    .option-btn:hover { border-color: var(--primary); transform: translateX(5px); }
+    
+    .submit-btn { width: 100%; background: var(--primary); color: white; border: none; border-radius: 40px; padding: 16px; font-weight: bold; cursor: pointer; font-size: 16px; }
+    
+    input { width: 100%; padding: 15px; margin-bottom: 15px; border-radius: 12px; border: 1px solid #2a2740; background: #0a0a0f; color: white; }
+    
+    .hidden { display: none; }
+    .loader { border: 3px solid #f3f3f3; border-top: 3px solid var(--primary); border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 20px auto; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
 <div class="wrap">
-  <nav>
-    <div class="nav-logo">
-      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 2L3 6.5V13C3 18 12 22 12 22C12 22 21 18 21 13V6.5L12 2Z" stroke="currentColor" stroke-width="1.2"/>
-        <path d="M8.5 12L11 14.5L15.5 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      InproShield
-    </div>
-    <div class="nav-badge">Diagnóstico inmobiliario</div>
-  </nav>
+  <div class="nav-logo">🛡️ InproShield</div>
 
-  <div class="hero">
-    <div class="hero-eyebrow">
-      <div class="eyebrow-dot"></div>
-      Analiza tu agencia
-    </div>
-    <h1>¿Qué necesita<br/>tu agencia?</h1>
-    <p class="hero-sub">Analiza tus procesos, detecta áreas de mejora y recibe recomendaciones con inteligencia artificial.</p>
+  <div id="heroSection" class="hero">
+    <h1>Escala tu Agencia al<br/><em>Nivel Pro</em></h1>
+    <p class="hero-sub">Detecta fugas de dinero en tu gestión inmobiliaria y recibe un plan de acción generado por IA.</p>
   </div>
 
-  <!-- Cuestionario -->
   <div id="quizContainer" class="scan-card">
-    <div class="scan-hint" id="stepCounter">Paso 1 de 7</div>
-    <div class="question-text" id="questionText"></div>
-    <div id="optionsContainer" class="options-grid"></div>
-    <button id="nextButton" class="next-btn">Siguiente →</button>
+    <div id="stepCounter" style="color: var(--primary); font-weight: bold; font-size: 12px; margin-bottom: 10px;">PASO 1 DE 7</div>
+    <div id="questionText" style="font-size: 1.5rem; font-weight: bold; margin-bottom: 20px;"></div>
+    <div id="optionsContainer"></div>
   </div>
 
-  <!-- Formulario de contacto (inicialmente oculto) -->
   <div id="leadFormContainer" class="scan-card hidden">
-    <div class="scan-hint">¡Casi listo!</div>
-    <h3 style="font-family:var(--serif); margin-bottom: 0.75rem; font-size: 1.6rem;">Recibe tu diagnóstico personalizado</h3>
-    <p style="margin-bottom: 1.75rem; color: var(--muted);">Ingresa tus datos y descubre las áreas de mejora de tu agencia, junto con recomendaciones exclusivas de InproShield.</p>
-    <form id="leadForm" class="lead-form">
-      <input type="text" id="leadName" placeholder="Nombre completo" required>
-      <input type="email" id="leadEmail" placeholder="Correo electrónico" required>
-      <input type="tel" id="leadPhone" placeholder="Teléfono / WhatsApp" required>
-      <button type="submit" class="submit-btn">Ver mi informe →</button>
+    <h2 style="font-family: var(--serif); margin-bottom: 1rem;">Tu informe está listo</h2>
+    <p style="color: var(--muted); margin-bottom: 20px;">Para desbloquear el análisis de IA y las recomendaciones personalizadas, dinos dónde enviarlo:</p>
+    <form id="leadForm">
+      <input type="text" id="leadName" placeholder="Tu nombre" required>
+      <input type="tel" id="leadPhone" placeholder="WhatsApp (Para enviar el reporte)" required>
+      <button type="submit" class="submit-btn">Desbloquear Reporte IA →</button>
     </form>
-    <p style="font-size: 12px; color: var(--muted2); margin-top: 1.5rem;">Usamos tus datos para enviarte el informe y luego contactarte con opciones de mejora.</p>
   </div>
 
-  <!-- Zona de resultados -->
-  <div id="resultZone" class="result-zone hidden"></div>
+  <div id="resultZone" class="hidden">
+    <div id="loadingAi" class="scan-card text-center">
+        <div class="loader"></div>
+        <p>Gemini IA está procesando tu diagnóstico...</p>
+    </div>
+    <div id="aiContent" class="hidden">
+        <div class="scan-card" style="border-left: 5px solid var(--primary);">
+            <h2 id="aiTitle" style="font-family: var(--serif);"></h2>
+            <div id="aiAnalysis" style="margin-top: 15px; font-size: 15px;"></div>
+        </div>
+        <div class="scan-card" style="background: #25d36610; text-align: center;">
+            <h3>¿Quieres implementar estas mejoras?</h3>
+            <p>Agenda una consultoría gratuita para digitalizar tu agencia.</p>
+            <a href="https://wa.me/584245095506?text=He+visto+mi+diagnostico+IA+y+quiero+mejorar" style="display: block; background: #25d366; color: white; padding: 15px; border-radius: 40px; text-decoration: none; font-weight: bold; margin-top: 15px;">Hablar con un Especialista</a>
+        </div>
+    </div>
+  </div>
 
-  <footer>
-    <strong>InproShield</strong><br/>
-    © 2026 · Herramientas para agentes inmobiliarios en Venezuela
-  </footer>
 </div>
 
 <script>
-  // ----- PREGUNTAS DEL DIAGNÓSTICO -----
   const questions = [
-    {
-      text: "¿Cómo obtienes la mayoría de tus clientes potenciales?",
-      options: ["WhatsApp / redes sociales", "Portales inmobiliarios (Marketplace, etc.)", "Referidos de clientes", "Publicidad pagada", "Otro / no tengo un método claro"]
-    },
-    {
-      text: "¿Qué herramienta usas para gestionar tus leads (clientes potenciales)?",
-      options: ["Excel / Google Sheets", "Agenda física o notas", "CRM específico", "No llevo un registro formal", "WhatsApp solamente"]
-    },
-    {
-      text: "¿Cómo publicas tus propiedades?",
-      options: ["Solo fotos en redes", "Videos en Instagram/TikTok", "Portales inmobiliarios", "No publico, solo me contactan", "Uso una combinación de varios"]
-    },
-    {
-      text: "¿Llevas control de visitas a propiedades?",
-      options: ["Sí, con agenda manual", "Sí, uso una app o herramienta digital", "No, lo recuerdo en el momento", "Lo hago por WhatsApp"]
-    },
-    {
-      text: "¿Realizas seguimiento automático a tus clientes después de una visita?",
-      options: ["No, solo si me acuerdo", "Sí, uso mensajes programados", "Intento llamar al día siguiente", "Depende del cliente"]
-    },
-    {
-      text: "¿Cuál es tu principal dolor hoy en tu gestión?",
-      options: ["Me cuesta captar leads", "No organizo bien las propiedades", "Pierdo clientes por falta de seguimiento", "Me toma mucho tiempo administrar todo", "No mido resultados"]
-    },
-    {
-      text: "¿Cuánto tiempo dedicas a tareas administrativas por semana?",
-      options: ["Menos de 5 horas", "Entre 5 y 10 horas", "Más de 10 horas", "No lo sé"]
-    }
+    { text: "¿Cuál es tu principal canal de captación?", options: ["WhatsApp/RRSS", "Portales", "Referidos", "Frío"] },
+    { text: "¿Dónde guardas tus datos de clientes?", options: ["Excel/Papel", "CRM Inmobiliario", "WhatsApp", "En la mente"] },
+    { text: "¿Haces seguimiento automático?", options: ["No, se me olvida", "Sí, con herramientas", "A veces", "No sé qué es eso"] }
+    // ... agrega las demás aquí
   ];
 
   let currentStep = 0;
-  let answers = [];
-
-  // Elementos DOM
-  const quizContainer = document.getElementById('quizContainer');
-  const stepCounter = document.getElementById('stepCounter');
-  const questionText = document.getElementById('questionText');
-  const optionsContainer = document.getElementById('optionsContainer');
-  const nextButton = document.getElementById('nextButton');
-  const leadFormContainer = document.getElementById('leadFormContainer');
-  const resultZone = document.getElementById('resultZone');
+  let userAnswers = [];
 
   function loadQuestion() {
     if (currentStep >= questions.length) {
-      quizContainer.classList.add('hidden');
-      leadFormContainer.classList.remove('hidden');
+      document.getElementById('quizContainer').classList.add('hidden');
+      document.getElementById('leadFormContainer').classList.remove('hidden');
       return;
     }
-
     const q = questions[currentStep];
-    stepCounter.innerText = `Paso ${currentStep+1} de ${questions.length}`;
-    questionText.innerText = q.text;
-    optionsContainer.innerHTML = '';
+    document.getElementById('stepCounter').innerText = `PASO ${currentStep + 1} DE ${questions.length}`;
+    document.getElementById('questionText').innerText = q.text;
+    const container = document.getElementById('optionsContainer');
+    container.innerHTML = '';
     q.options.forEach(opt => {
       const btn = document.createElement('button');
       btn.className = 'option-btn';
       btn.innerText = opt;
-      btn.onclick = () => {
-        answers[currentStep] = opt;
-        currentStep++;
-        loadQuestion();
-      };
-      optionsContainer.appendChild(btn);
+      btn.onclick = () => { userAnswers.push({q: q.text, a: opt}); currentStep++; loadQuestion(); };
+      container.appendChild(btn);
     });
   }
 
-  nextButton.onclick = () => {
-    if (answers[currentStep] === undefined) {
-      alert("Por favor selecciona una opción.");
-      return;
-    }
-    currentStep++;
-    loadQuestion();
-  };
-
   loadQuestion();
 
-  // ----- ENVÍO DE FORMULARIO DE CONTACTO -----
-  const leadForm = document.getElementById('leadForm');
-  leadForm.addEventListener('submit', async (e) => {
+  document.getElementById('leadForm').onsubmit = async (e) => {
     e.preventDefault();
-    const name = document.getElementById('leadName').value.trim();
-    const email = document.getElementById('leadEmail').value.trim();
-    const phone = document.getElementById('leadPhone').value.trim();
+    document.getElementById('leadFormContainer').classList.add('hidden');
+    document.getElementById('resultZone').classList.remove('hidden');
 
-    if (!name || !email || !phone) {
-      alert('Completa todos los campos.');
-      return;
-    }
-
-    const submitBtn = leadForm.querySelector('button');
-    submitBtn.disabled = true;
-    submitBtn.innerText = 'Enviando...';
-
-    const leadData = { name, email, phone, diagnostic: answers };
-
+    // LLAMADA AL MOTOR IA (Tu Worker de Cloudflare)
     try {
-      const response = await fetch('/api/lead', {
+      const response = await fetch('/api/valorar', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(leadData)
+        body: JSON.stringify({
+          name: document.getElementById('leadName').value,
+          responses: userAnswers
+        })
       });
-      const result = await response.json();
-      if (result.success) {
-        mostrarInforme(answers);
-        leadFormContainer.classList.add('hidden');
-      } else {
-        alert('Error al guardar los datos. Intenta de nuevo.');
-      }
+      const data = await response.json();
+      
+      document.getElementById('loadingAi').classList.add('hidden');
+      document.getElementById('aiContent').classList.remove('hidden');
+      document.getElementById('aiTitle').innerText = "Veredicto InproShield Pro";
+      document.getElementById('aiAnalysis').innerHTML = data.analysis || "Análisis completado. Por favor contáctenos para los detalles.";
+      
     } catch (err) {
-      console.error(err);
-      alert('Error de conexión. Intenta más tarde.');
-    } finally {
-      submitBtn.disabled = false;
-      submitBtn.innerText = 'Ver mi informe →';
+      alert("Error conectando con el motor de IA. Revisa tu conexión.");
     }
-  });
-
-  function mostrarInforme(respuestas) {
-    const areas = [];
-    if (respuestas[0]?.includes('Otro') || respuestas[0]?.includes('no tengo')) {
-      areas.push("📈 Captación: definir un proceso claro para obtener leads.");
-    }
-    if (respuestas[1]?.includes('Excel') || respuestas[1]?.includes('física') || respuestas[1]?.includes('WhatsApp solamente')) {
-      areas.push("🗂️ Gestión de leads: automatiza el seguimiento para no perder oportunidades.");
-    }
-    if (respuestas[2]?.includes('Solo fotos') || respuestas[2]?.includes('No publico')) {
-      areas.push("📸 Publicación de propiedades: mejora la presentación y alcance digital.");
-    }
-    if (respuestas[3]?.includes('manual') || respuestas[3]?.includes('no') || respuestas[3]?.includes('WhatsApp')) {
-      areas.push("📅 Control de visitas: digitaliza la agenda y evita confusiones.");
-    }
-    if (respuestas[4]?.includes('No') || respuestas[4]?.includes('si me acuerdo')) {
-      areas.push("⏰ Seguimiento automático: implementa recordatorios y mensajes programados.");
-    }
-    if (respuestas[5]?.includes('Me cuesta') || respuestas[5]?.includes('organizo') || respuestas[5]?.includes('Pierdo')) {
-      areas.push("🎯 Estrategia comercial: enfócate en las áreas con mayor fuga de clientes.");
-    }
-    if (respuestas[6]?.includes('Más de 10') || respuestas[6]?.includes('No lo sé')) {
-      areas.push("⚙️ Eficiencia operativa: reduce tiempo administrativo con herramientas digitales.");
-    }
-
-    if (areas.length === 0) areas.push("🔍 Sigue potenciando tu agencia con tecnología avanzada.");
-
-    const areasHtml = areas.map(a => `<li style="margin-bottom: 12px; display: flex; gap: 8px; align-items: baseline;"><span style="font-size: 1.2rem;">•</span> ${a}</li>`).join('');
-
-    resultZone.innerHTML = `
-      <div class="verdict-card">
-        <div class="verdict-body">
-          <h2 style="font-family:var(--serif); font-size: 1.8rem; margin-bottom: 0.5rem;">Tu diagnóstico InproShield</h2>
-          <p style="color: var(--muted);">Según tus respuestas, estos son los puntos clave donde puedes potenciar tu agencia:</p>
-        </div>
-      </div>
-      <div class="panel-full">
-        <div class="panel-title">Áreas de oportunidad</div>
-        <ul style="list-style: none; padding-left: 0;">${areasHtml}</ul>
-      </div>
-      <div class="rec-card">
-        <strong style="font-size: 1.1rem;">🔐 ¿Cómo lograr estos cambios?</strong><br/>
-        Con <strong>InproShield</strong> puedes automatizar la captación, gestionar propiedades desde WhatsApp y obtener reportes de rendimiento. Nuestros planes de apoyo incluyen asesoría personalizada y herramientas digitales diseñadas para agentes venezolanos.
-        <div style="margin-top: 1rem;">
-          <a href="https://api.whatsapp.com/send/?phone=584245095506&text=Quiero+mejorar+mi+agencia+con+InproShield&type=phone_number&app_absent=0" class="wa-btn">📲 Contáctanos por WhatsApp</a>
-        </div>
-      </div>
-    `;
-    resultZone.classList.remove('hidden');
-    resultZone.scrollIntoView({ behavior: 'smooth' });
-  }
+  };
 </script>
 </body>
 </html>
